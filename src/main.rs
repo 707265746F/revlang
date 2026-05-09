@@ -2,23 +2,24 @@ mod lexer;
 mod parser;
 
 fn main() {
-    let inputs = vec![
-        "let base: u64 = 0x7FFF0000",
-        "let health: u32 = 100",
-        "let broken: u32",          // missing = and value
-    ];
+    let input = "struct Player { health: u32 @ 0x1A4, mana: u32 @ 0x1A8, name: str @ 0x1B0 }";
 
-    for input in inputs {
-        println!("Input: \"{}\"", input);
-        match lexer::tokenize(input) {
-            Ok(tokens) => {
-                match parser::parse_var_decl(&tokens) {
-                    Ok(decl) => println!("Parsed: {:?}", decl),
-                    Err(e)   => println!("Parse error: {}", e),
+    println!("Input:\n  {}\n", input);
+    match lexer::tokenize(input) {
+        Ok(tokens) => {
+            match parser::parse_struct(&tokens) {
+                Ok(s) => {
+                    println!("Struct: {}", s.name);
+                    for field in s.fields {
+                        println!(
+                            "  {} : {} @ 0x{:X}",
+                            field.name, field.ty, field.offset
+                        );
+                    }
                 }
+                Err(e) => println!("Parse error: {}", e),
             }
-            Err(e) => println!("Lex error: {}", e),
         }
-        println!();
+        Err(e) => println!("Lex error: {}", e),
     }
 }

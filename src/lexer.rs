@@ -18,6 +18,10 @@ pub enum Token {
     RParen,   // )
     Colon,    // :
     Equals,   // =
+    LBrace,  // {
+    RBrace,  // }
+    At,      // @
+    Comma,   // ,
 
     // keywords
     Let,
@@ -57,6 +61,10 @@ pub fn tokenize(input: &str) -> Result<Vec<Token>, String> {
             ')' => { tokens.push(Token::RParen);    chars.next(); }
             ':' => { tokens.push(Token::Colon);     chars.next(); }
             '=' => { tokens.push(Token::Equals);    chars.next(); }
+            '{' => { tokens.push(Token::LBrace);    chars.next(); }
+            '}' => { tokens.push(Token::RBrace);    chars.next(); }
+            '@' => { tokens.push(Token::At);        chars.next(); }
+            ',' => { tokens.push(Token::Comma);     chars.next(); }
 
             // keywords, types, and identifiers
             'a'..='z' | 'A'..='Z' | '_' => {
