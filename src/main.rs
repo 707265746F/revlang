@@ -2,8 +2,10 @@ mod lexer;
 
 fn main() {
     let inputs = vec![
-        "0xFF + 10 - (0xDEAD & 42)",  // valid
-        "0xFF + @@@",                  // invalid — @ is not valid in RevLang yet
+        "0xFF + 10 - (0xDEAD & 42)",   // phase 1 — still works
+        "let base: u64 = 0x7FFF0000",  // phase 2 — new!
+        "let health: u32 = 100",       // phase 2 — new!
+        "let player: unknown = 0xFF",  // identifier test
     ];
 
     for input in inputs {
@@ -15,9 +17,7 @@ fn main() {
                     println!("  {:?}", token);
                 }
             }
-            Err(e) => {
-                println!("Error:  {}", e);
-            }
+            Err(e) => println!("Error:  {}", e),
         }
         println!();
     }

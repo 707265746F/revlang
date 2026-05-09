@@ -14,8 +14,26 @@ pub enum Token {
     Caret,
 
     // punctuation
-    LParen,
-    RParen,
+    LParen,   // (
+    RParen,   // )
+    Colon,    // :
+    Equals,   // =
+
+    // keywords
+    Let,
+    Struct,
+    Fn,
+
+    // types
+    U8,
+    U16,
+    U32,
+    U64,
+    Bool,
+    Str,
+
+    // identifier — a name invented by the developer
+    Ident(String),
 }
 
 pub fn tokenize(input: &str) -> Result<Vec<Token>, String> {
@@ -37,6 +55,37 @@ pub fn tokenize(input: &str) -> Result<Vec<Token>, String> {
             '^' => { tokens.push(Token::Caret);     chars.next(); }
             '(' => { tokens.push(Token::LParen);    chars.next(); }
             ')' => { tokens.push(Token::RParen);    chars.next(); }
+            ':' => { tokens.push(Token::Colon);     chars.next(); }
+            '=' => { tokens.push(Token::Equals);    chars.next(); }
+
+            // keywords, types, and identifiers
+            'a'..='z' | 'A'..='Z' | '_' => {
+                let mut word = String::new();
+                while let Some(&c) = chars.peek() {
+                    if c.is_alphanumeric() || c == '_' {
+                        word.push(c);
+                        chars.next();
+                    } else {
+                        break;
+                    }
+                }
+                let token = match word.as_str() {
+                    // keywords
+                    "let"    => Token::Let,
+                    "struct" => Token::Struct,
+                    "fn"     => Token::Fn,
+                    // types
+                    "u8"     => Token::U8,
+                    "u16"    => Token::U16,
+                    "u32"    => Token::U32,
+                    "u64"    => Token::U64,
+                    "bool"   => Token::Bool,
+                    "str"    => Token::Str,
+                    // anything else is an identifier
+                    _        => Token::Ident(word),
+                };
+                tokens.push(token);
+            }
 
             // hex literals: 0xFF, 0xDEAD
             '0' => {
