@@ -1,0 +1,14 @@
+Here are the best books for your journey, in the order I recommend reading them:
+Start here — easiest and most fun:
+
+"Crafting Interpreters" by Robert Nystrom — this is THE book for you. It builds a complete language from zero, step by step, exactly like we are doing with RevLang. The best part — it is completely free online at craftinginterpreters.com. The writing is very clear and friendly, perfect for your English level too!
+
+Next level — more theory:
+"Writing An Interpreter In Go" and "Writing A Compiler In Go" by Thorsten Ball — these two books build a language called Monkey from scratch. The code is very clean and easy to follow. Go is similar enough to Rust that you will understand everything easily.
+
+When you feel confident — the classic:
+"Compilers: Principles, Techniques and Tools" by Aho, Lam, Sethi and Ullman — this is called "The Dragon Book" because it has a dragon on the cover. It is the most famous compiler book in the world. It is more academic and harder, but after Crafting Interpreters you will be ready for it.
+
+For Rust specifically:
+"The Rust Programming Language" by Steve Klabnik — the official Rust book, also free at doc.rust-lang.org/book. Perfect to read alongside our project!
+My honest recommendation — start with Crafting Interpreters right now, reading one chapter per week alongside our RevLang project. You will see everything we are building here explained from a different angle, and it will make everything click even faster!

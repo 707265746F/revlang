@@ -1,23 +1,23 @@
 mod lexer;
+mod parser;
 
 fn main() {
     let inputs = vec![
-        "0xFF + 10 - (0xDEAD & 42)",   // phase 1 — still works
-        "let base: u64 = 0x7FFF0000",  // phase 2 — new!
-        "let health: u32 = 100",       // phase 2 — new!
-        "let player: unknown = 0xFF",  // identifier test
+        "let base: u64 = 0x7FFF0000",
+        "let health: u32 = 100",
+        "let broken: u32",          // missing = and value
     ];
 
     for input in inputs {
-        println!("Input:  \"{}\"", input);
+        println!("Input: \"{}\"", input);
         match lexer::tokenize(input) {
             Ok(tokens) => {
-                println!("Tokens:");
-                for token in tokens {
-                    println!("  {:?}", token);
+                match parser::parse_var_decl(&tokens) {
+                    Ok(decl) => println!("Parsed: {:?}", decl),
+                    Err(e)   => println!("Parse error: {}", e),
                 }
             }
-            Err(e) => println!("Error:  {}", e),
+            Err(e) => println!("Lex error: {}", e),
         }
         println!();
     }
