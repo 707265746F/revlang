@@ -1,0 +1,6 @@
+struct Player {
+    health: u32 @ 0x1A4,
+    mana:   u32 @ 0x1A8,
+    name:   str @ 0x1B0,
+    level:  u32 @ 0x1B4,
+}

@@ -1,25 +1,41 @@
 mod lexer;
 mod parser;
 
-fn main() {
-    let input = "struct Player { health: u32 @ 0x1A4, mana: u32 @ 0x1A8, name: str @ 0x1B0 }";
+use std::env;
+use std::fs;
 
-    println!("Input:\n  {}\n", input);
-    match lexer::tokenize(input) {
-        Ok(tokens) => {
-            match parser::parse_struct(&tokens) {
-                Ok(s) => {
-                    println!("Struct: {}", s.name);
-                    for field in s.fields {
-                        println!(
-                            "  {} : {} @ 0x{:X}",
-                            field.name, field.ty, field.offset
-                        );
-                    }
-                }
-                Err(e) => println!("Parse error: {}", e),
-            }
+fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    if args.len() < 2 {
+        println!("Usage: revlang <file.rev>");
+        return;
+    }
+
+    let input_path = &args[1];
+
+    let source = match fs::read_to_string(input_path) {
+        Ok(content) => content,
+        Err(e) => {
+            println!("Error reading file '{}': {}", input_path, e);
+            return;
         }
-        Err(e) => println!("Lex error: {}", e),
+    };
+
+    println!("RevLang compiling: {}", input_path);
+
+    let tokens = match lexer::tokenize(&source) {
+        Ok(t)  => t,
+        Err(e) => { println!("Lex error: {}", e); return; }
+    };
+
+    let decl = match parser::parse_struct(&tokens) {
+        Ok(d)  => d,
+        Err(e) => { println!("Parse error: {}", e); return; }
+    };
+
+    println!("Struct: {}", decl.name);
+    for field in &decl.fields {
+        println!("  {} : {} @ 0x{:X}", field.name, field.ty, field.offset);
     }
 }
